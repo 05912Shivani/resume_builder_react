@@ -139,13 +139,4 @@ test("removes a project", async () => {
       <ProjectsForm />
     </Provider>
   );
-
-  // Wait for "Remove" button to appear
-//   const removeButton = await screen.findByText(/Remove/i);
-
-//   await act(async () => {
-//     fireEvent.click(removeButton);
-//   });
-
-//   expect(store.dispatch).toHaveBeenCalledWith(saveProjects([]));
 });
