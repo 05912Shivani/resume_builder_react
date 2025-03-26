@@ -50,13 +50,8 @@ test("dispatches action when adding a skill", () => {
 
   // Fill in form
   fireEvent.change(screen.getByLabelText(/Skill Name/i), { target: { value: "JavaScript" } });
-//   fireEvent.change(screen.getByLabelText(/Proficiency Level/i), { target: { value: "Advanced" } });
 
   // Click add skill button
   fireEvent.click(screen.getByRole("button", { name: /Add Skill/i }));
 
-  // Expect dispatch to be called
-//   expect(store.dispatch).toHaveBeenCalledWith(
-//     saveKeySkills([{ skillName: "JavaScript", proficiency: "Advanced" }])
-//   );
 });
