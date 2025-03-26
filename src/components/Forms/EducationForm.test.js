@@ -47,14 +47,7 @@ describe("EducationForm Component", () => {
       </Provider>
     );
   
-    // Open the dropdown using the test ID
-    // fireEvent.mouseDown(screen.getByTestId("education-type-select"));
-  
-    // Select an option
-    // const option = await screen.findByText("Graduation");
-    // fireEvent.click(option);
-  
-    // Fill in required fields
+   // Fill in required fields
     fireEvent.change(screen.getByLabelText(/Degree/i), { target: { value: "B.Tech" } });
     fireEvent.change(screen.getByLabelText(/University/i), { target: { value: "ABC University" } });
     fireEvent.change(screen.getByLabelText(/Start Year/i), { target: { value: "2020" } });
@@ -62,8 +55,6 @@ describe("EducationForm Component", () => {
     // Click Add Education button
     fireEvent.click(screen.getByRole("button", { name: /Add Education/i }));
   
-    // Check if dispatch was called
-    // expect(store.dispatch).toHaveBeenCalledTimes(1);
   });
   
   
