@@ -35,6 +35,6 @@ Start the Development Server:npm start
 
 The app will run on http://localhost:3000.
 
-You can also do the testing by run npm test.
+You can also do the testing by: npm test.
 
 
