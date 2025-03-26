@@ -27,6 +27,7 @@ Enter a name for your resume and click "Save".
 Download the resume as a PDF.
 
 You can also clone the project to run on your system: https://github.com/05912Shivani/resume_builder_react.git
+
 cd resume-builder
 
 Install Dependencies:npm install
