@@ -4,20 +4,20 @@ import { Typography, Box, Button } from '@mui/material';
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false };// State to track if an error has occurred
   }
-
+ // Lifecycle method that updates state when an error is encountered
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-
-  // componentDidCatch(error, info) {
-  //   console.error('ErrorBoundary caught an error', error, info);
-  // }
-
+ // Logs error details to the console for debugging
+  componentDidCatch(error, info) {
+    console.error('ErrorBoundary caught an error', error, info);
+  }
+// Function to reset state and reload the page when retry is clicked
   handleRetry = () => {
-    this.setState({ hasError: false });
-    window.location.reload();
+    this.setState({ hasError: false });// Reset error state
+    window.location.reload();// Reload the page to attempt recovery
   };
 
   render() {
@@ -37,7 +37,7 @@ class ErrorBoundary extends Component {
       );
     }
 
-    return this.props.children;
+    return this.props.children;// Render children components if no error occurred
   }
 }
 
