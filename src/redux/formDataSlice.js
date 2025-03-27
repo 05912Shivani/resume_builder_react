@@ -6,20 +6,20 @@ const initialState = {
   education: [],
   keySkills: [],
   projects: [],
-  activeTab: 0,
-  templateId: 1,
+  activeTab: 0,// Tracks which tab is currently active in the form UI
+  templateId: 1,// Stores selected resume template ID
 };
 
 const formDataSlice = createSlice({
-  name: 'formData',
-  initialState,
+  name: 'formData',// Name of the slice
+  initialState,// Setting the initial state
   reducers: {
     updateFormData: (state, action) => {
       const { field, data } = action.payload;
-      state[field] = data;
+      state[field] = data; // Dynamically updates any field in the state
     },
     setActiveTab: (state, action) => {
-      state.activeTab = action.payload;
+      state.activeTab = action.payload;// Updates the active form tab
     },
     savePersonalInfo: (state, action) => {
       state.personalInfo = action.payload;
@@ -37,22 +37,22 @@ const formDataSlice = createSlice({
       state.projects = action.payload;
     },
     setTemplateId: (state, action) => {
-      state.templateId = action.payload;
+      state.templateId = action.payload;// Sets the selected resume template ID
     },
-    resetFormData: () => initialState,  
+    resetFormData: () => initialState,  // Resets the state to its initial values
   },
 });
 
 export const {
-  updateFormData,
-  setActiveTab,
+  updateFormData,// Exporting action to update any form data dynamically
+  setActiveTab,// Exporting action to update active tab state
   savePersonalInfo,
   saveWorkExperience,
   saveEducation,
   saveKeySkills,
   saveProjects,
-  setTemplateId,
-  resetFormData
+  setTemplateId,// Exporting action to update selected template ID
+  resetFormData // Exporting action to reset the form data
 } = formDataSlice.actions;
 
 export default formDataSlice.reducer;
