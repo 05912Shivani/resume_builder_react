@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import { Box, Typography, Divider, Grid, Button, FormControlLabel, Checkbox } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setActiveTab } from '../../redux/formDataSlice'; 
+import { setActiveTab } from '../../redux/formDataSlice'; // Redux action to track the active section
 
 const ResumeTemplate = ({ personalInfo, workExperience, education, keySkills, projects }) => {
+   // State variables to control the visibility of different resume sections
   const [includeWorkExperience, setIncludeWorkExperience] = useState(true);
   const [includeEducation, setIncludeEducation] = useState(true);
   const [includeProjects, setIncludeProjects] = useState(true);
   const [includeKeySkills, setIncludeKeySkills] = useState(true);
   
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();// Hook for navigation
+  const dispatch = useDispatch();// Hook to dispatch Redux actions
 
+  // Function to navigate to the details-filling page and set the active tab
   const handleEdit = (sectionIndex) => {
-    dispatch(setActiveTab(sectionIndex)); 
-    navigate('/details-filling'); 
+    dispatch(setActiveTab(sectionIndex)); // Store which section is being edited
+    navigate('/details-filling'); // Redirect to the editing page
   };
 
   return (
