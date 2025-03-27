@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveEducation } from '../../redux/formDataSlice';
 
 const EducationForm = () => {
-  const dispatch = useDispatch();
-  const educationList = useSelector((state) => state.formData.education);
+  const dispatch = useDispatch();// Redux dispatch function to update the store
+  const educationList = useSelector((state) => state.formData.education);// Get education list from Redux store
 
+  // State for new education details
   const [newEducation, setNewEducation] = useState({
     educationType: '',
     degree: '',
@@ -16,42 +17,45 @@ const EducationForm = () => {
     percentage: '',
   });
 
-  const [error, setError] = useState('');
-  const [editIndex, setEditIndex] = useState(null); 
+  const [error, setError] = useState('');// Error message state
+  const [editIndex, setEditIndex] = useState(null); // Tracks the index being edited
 
-  const handleInputChange = (e) => {
+  // Handles input field changes
+ const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewEducation({ ...newEducation, [name]: value });
   };
 
+  // Adds a new education record or updates an existing one
   const handleAddEducation = () => {
+    // Basic validation: Ensure required fields are filled
     if (!newEducation.educationType || !newEducation.degree || !newEducation.university || !newEducation.startYear) {
       setError('Education Type, Degree, University, and Start Year are required.');
       return;
     }
 
-    let updatedEducationList = [...educationList];
+    let updatedEducationList = [...educationList];// Clone existing list
 
     if (editIndex !== null) {
-      updatedEducationList[editIndex] = newEducation; 
+      updatedEducationList[editIndex] = newEducation; // Update existing entry
       setEditIndex(null);
     } else {
-      updatedEducationList.push(newEducation);
+      updatedEducationList.push(newEducation);// Add new entry
     }
 
-    dispatch(saveEducation(updatedEducationList));
+    dispatch(saveEducation(updatedEducationList));// Update Redux store
     setNewEducation({ educationType: '', degree: '', university: '', startYear: '', endYear: '', percentage: '' });
-    setError('');
+    setError('');// Clear error message
   };
-
+  // Populates the form fields for editing an existing education entry
   const handleEditEducation = (index) => {
-    setNewEducation(educationList[index]);
-    setEditIndex(index);
+    setNewEducation(educationList[index]);// Load selected entry into form
+    setEditIndex(index); // Set edit mode
   };
-
+ // Removes an education entry from the list
   const handleRemoveEducation = (index) => {
     const updatedEducationList = educationList.filter((_, i) => i !== index);
-    dispatch(saveEducation(updatedEducationList));
+    dispatch(saveEducation(updatedEducationList));// Update Redux store
   };
 
   return (
