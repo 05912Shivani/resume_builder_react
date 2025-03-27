@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { Box, Button, Typography, Divider, Modal, TextField, } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { setActiveTab } from "../redux/formDataSlice";
-import jsPDF from "jspdf";
+import jsPDF from "jspdf";// Importing jsPDF to generate a PDF file
 
 const PreviewPage4 = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+   // Extracting data from Redux store
   const {
     personalInfo,
     workExperience,
@@ -17,8 +18,8 @@ const PreviewPage4 = () => {
     activeTab,
   } = useSelector((state) => state.formData);
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [resumeName, setResumeName] = useState("resume");
+  const [isModalOpen, setModalOpen] = useState(false);// State to handle modal visibility
+  const [resumeName, setResumeName] = useState("resume");// State for resume filename
   const [sections, setSections] = useState({
     personalInfo: true,
     workExperience: true,
@@ -26,8 +27,9 @@ const PreviewPage4 = () => {
     projects: true,
     keySkills: true,
   });
-  const resumeRef = useRef();
+  const resumeRef = useRef(); // Reference for the resume container
 
+  // Effect to initialize sections if activeTab is not set but personalInfo exists
   useEffect(() => {
     if (!activeTab && personalInfo.name) {
       setSections({
@@ -39,25 +41,25 @@ const PreviewPage4 = () => {
       });
     }
   }, [activeTab, personalInfo]);
-
+ // Function to toggle the visibility of a section
   const toggleSection = (section) => {
     setSections((prevState) => ({
       ...prevState,
       [section]: !prevState[section],
     }));
   };
-
+ // Function to generate and download a resume PDF
   const handleDownload = () => {
-    const doc = new jsPDF();
+    const doc = new jsPDF();// Creating a new PDF document
     doc.setFont("helvetica", "bold");
 
-    let yPosition = 30;
-    const pageHeight = doc.internal.pageSize.height - 20;
-
+    let yPosition = 30;// Initial Y position for text
+    const pageHeight = doc.internal.pageSize.height - 20;// Max height before adding a new page
+// Helper function to check if a new page is needed
     const checkPageOverflow = (y) => {
       if (y > pageHeight) {
         doc.addPage();
-        return 30;
+        return 30;// Reset Y position for new page
       }
       return y;
     };
@@ -277,9 +279,9 @@ const PreviewPage4 = () => {
 
       yPosition += 25;
     }
-
+// Save the generated PDF
     doc.save(`${resumeName || "Creative_resume"}.pdf`);
-    setModalOpen(true);
+    setModalOpen(true);// Show modal on successful download
   };
 
   const renderSection = (title, content, tabIndex, sectionName) => (
