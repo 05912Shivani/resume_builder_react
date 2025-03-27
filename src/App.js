@@ -9,15 +9,16 @@ import PreviewPage4 from './pages/PreviewPage4';
 import AboutUsPage from './pages/AboutUsPage';
 import ResumeTemplate from './components/ResumeTemplate/ResumeTemplate';
 import LandingPage from './pages/LandingPage';
+// Importing layout components
 import Header from './components/Header/Header';
 import Footer from './components/Footer';
 
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <Routes>
+    <Router>{/* Wrapping the application with Router for navigation */}
+      <Header />{/* Global header component */}
+      <Routes>{/* Defines all routes in the application */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/home" element={<HomePage />} />
         <Route path="/details-filling" element={<DetailsFillingPage />} />
@@ -29,7 +30,7 @@ function App() {
         <Route path="/template/:id" element={<ResumeTemplate />} />
      
       </Routes>
-      <Footer />
+      <Footer />{/* Global footer component */}
     </Router>
   );
 }
