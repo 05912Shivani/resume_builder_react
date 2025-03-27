@@ -15,18 +15,18 @@ const PreviewPage2 = () => {
     projects,
     keySkills,
     activeTab,
-  } = useSelector((state) => state.formData);
+  } = useSelector((state) => state.formData); // Extracting resume details from Redux state
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [resumeName, setResumeName] = useState("resume");
+  const [isModalOpen, setModalOpen] = useState(false);// State to handle modal visibility
+  const [resumeName, setResumeName] = useState("resume");// State to store resume name
   const [sections, setSections] = useState({
     personalInfo: true,
     workExperience: true,
     education: true,
     projects: true,
     keySkills: true,
-  });
-  const resumeRef = useRef();
+  });// State to manage visibility of resume sections
+  const resumeRef = useRef();// Reference for resume container
 
   useEffect(() => {
     if (!activeTab && personalInfo.name) {
@@ -38,22 +38,22 @@ const PreviewPage2 = () => {
         keySkills: true,
       });
     }
-  }, [activeTab, personalInfo]);
+  }, [activeTab, personalInfo]);// Ensuring all sections are enabled if there's personal info
 
   const toggleSection = (section) => {
     setSections((prevState) => ({
       ...prevState,
       [section]: !prevState[section],
     }));
-  };
+  };// Function to toggle section visibility
 
   const handleDownload = () => {
-    const doc = new jsPDF();
+    const doc = new jsPDF();// Initializing jsPDF instance
     doc.setFont("helvetica", "normal");
   
     let leftYPosition = 50; 
     let rightYPosition = 50; 
-    const pageHeight = doc.internal.pageSize.height - 20;
+    const pageHeight = doc.internal.pageSize.height - 20;// Setting page height limit for content
     const leftMargin = 10;
     const rightStartX = 100; 
     const sectionWidthLeft = 80; 
@@ -64,14 +64,14 @@ const PreviewPage2 = () => {
     const drawLeftColumnBackground = (startY) => {
       doc.setFillColor(173, 216, 230); 
       doc.rect(0, startY, sectionWidthLeft + leftMargin, pageHeight - startY + 20, "F");
-    };
+    };// Function to set background color for left column
   
     const checkPageOverflow = (y) => {
       if (y > pageHeight) {
         doc.addPage();
         blueStartY = 0;
         drawLeftColumnBackground(blueStartY);
-        return 20;
+        return 20;// Reset y position on new page
       }
       return y;
     };
@@ -84,7 +84,7 @@ const PreviewPage2 = () => {
         y += 5;
       });
       return y;
-    };
+    };// Function to wrap and add text within max width
   
     const addSectionTitle = (title, x, y) => {
       doc.setFontSize(18);
@@ -93,13 +93,13 @@ const PreviewPage2 = () => {
       y = checkPageOverflow(y);
       doc.text(title, x, y);
       return y + 10;
-    };
+    }; // Function to add section titles with styling
   
     drawLeftColumnBackground(blueStartY);
   
     if (sections.personalInfo) {
       doc.setFillColor(200, 200, 200); 
-      doc.rect(0, 0, doc.internal.pageSize.width,43.7, 'F'); 
+      doc.rect(0, 0, doc.internal.pageSize.width,43.7, 'F'); // Adding background for header
     
       leftYPosition = 20;
       const fullName = `${personalInfo.firstName} ${personalInfo.lastName}`;
@@ -107,14 +107,14 @@ const PreviewPage2 = () => {
        doc.setFontSize(30);
       const nameWidth = doc.getTextWidth(fullName);
       const centerX = (doc.internal.pageSize.width - nameWidth) / 2;
-      doc.text(fullName, centerX, leftYPosition);
+      doc.text(fullName, centerX, leftYPosition);// Centering name in header
       leftYPosition += 10;
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8);
       const contactText = `${personalInfo.email} | ${personalInfo.github} | ${personalInfo.linkedin}|${personalInfo.phone}|${personalInfo.address}`;
       const contactWidth = doc.getTextWidth(contactText);
       const contactCenterX = (doc.internal.pageSize.width - contactWidth) / 2;
-      doc.text(contactText, contactCenterX, leftYPosition);
+      doc.text(contactText, contactCenterX, leftYPosition);// Centering contact details in header
       leftYPosition += 20;
     }
   
@@ -150,7 +150,7 @@ if (sections.education && education.length > 0) {
     const degreeWidth = doc.getTextWidth(degreeText);
     const periodX = leftMargin + degreeWidth+5 
     doc.text(degreeText, leftMargin, leftYPosition);
-    doc.text(periodText, periodX, leftYPosition);
+    doc.text(periodText, periodX, leftYPosition);// Aligning education period next to degree
     leftYPosition += 5;
     leftYPosition = addWrappedText(`${edu.university}\nPercentage: ${edu.percentage}`, leftMargin, leftYPosition, sectionWidthLeft);
     leftYPosition += 5;
@@ -218,8 +218,8 @@ if (sections.workExperience && workExperience.length > 0) {
         rightYPosition += 5;
       });
     }
-    doc.save(`${resumeName || "Modern_resume"}.pdf`);
-    setModalOpen(true);
+    doc.save(`${resumeName || "Modern_resume"}.pdf`);// Saving the PDF
+    setModalOpen(true);// Opening the success modal
   };
   
   const renderSection = (title, content, tabIndex, sectionName) => (
@@ -266,7 +266,7 @@ if (sections.workExperience && workExperience.length > 0) {
         </Button>
       </Box>
     </Box>
-  );
+  ); // Function to render each section with edit and include/exclude options
 
   return (
       <Box sx={{ p: 4, minHeight: "100vh", backgroundColor: "#f4f4f9" }}>
