@@ -11,27 +11,28 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const DetailsFillingPage = () => {
   const dispatch = useDispatch();
-  const activeTab = useSelector((state) => state.formData.activeTab);
-  const templateId = useSelector((state) => state.formData.templateId); 
+  const activeTab = useSelector((state) => state.formData.activeTab);// Retrieves the currently active tab from Redux store
+  const templateId = useSelector((state) => state.formData.templateId); // Retrieves the selected template ID
   const navigate = useNavigate();
   const location = useLocation();
-  const { templateId: passedTemplateId } = location.state || {}; 
+  const { templateId: passedTemplateId } = location.state || {}; // Extracts templateId from navigation state if available
 
   useEffect(() => {
     if (passedTemplateId) {
-      dispatch(setTemplateId(passedTemplateId));  
+      dispatch(setTemplateId(passedTemplateId));   // Sets template ID in Redux store when received from navigation
     }
   }, [passedTemplateId, dispatch]);
 
+  // Handles tab change and updates Redux state
   const handleTabChange = (event, newValue) => {
     dispatch(setActiveTab(newValue));
   };
-
+// Navigates to preview page with selected template ID
   const previewResume = () => {
     console.log('Previewing template:', templateId); 
     navigate(`/preview${templateId}`, { state: { templateId } }); 
   };
-
+// Renders the appropriate form based on the active tab
   const renderForm = () => {
     switch (activeTab) {
       case 0:
@@ -61,7 +62,9 @@ const DetailsFillingPage = () => {
         <Tab label="Projects" />
         <Tab label="Keyskills" />
       </Tabs>
+  {/* Displays the form corresponding to the active tab */}
       <Box>{renderForm()}</Box>
+        {/* Navigation Buttons */}
       <Box sx={{ mt: 3 }}>
         {activeTab > 0 && (
           <Button
