@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveProjects } from '../../redux/formDataSlice';
 
 const ProjectsForm = () => {
-  const dispatch = useDispatch();
-  const projects = useSelector((state) => state.formData.projects);
+  const dispatch = useDispatch();// Redux dispatch function
+  const projects = useSelector((state) => state.formData.projects);// Retrieve projects from Redux store
 
+   // State for new project input fields
   const [newProject, setNewProject] = useState({
     title: '',
     description: '',
@@ -14,15 +15,18 @@ const ProjectsForm = () => {
     link: '',
   });
 
-  const [error, setError] = useState('');
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [error, setError] = useState('');// Error state for validation
+  const [editingIndex, setEditingIndex] = useState(null);// Track which project is being edited
 
+  // Handle input changes and update the newProject state
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProject({ ...newProject, [name]: value });
   };
 
+  // Handle adding or updating a project
   const handleAddOrUpdateProject = () => {
+    // Validation: Check if required fields are filled
     if (!newProject.title || !newProject.description) {
       setError('Title and Description are required.');
       return;
@@ -36,23 +40,24 @@ const ProjectsForm = () => {
       setEditingIndex(null);
     } else {
       // Add new project
-      dispatch(saveProjects([...projects, newProject]));
+      dispatch(saveProjects([...projects, newProject]));// Add new project to Redux store
     }
-
+// Reset form fields
     setNewProject({ title: '', description: '', technologies: '', link: '' });
     setError('');
   };
-
+// Handle editing an existing project
   const handleEditProject = (index) => {
-    setNewProject(projects[index]);
-    setEditingIndex(index);
+    setNewProject(projects[index]);// Populate input fields with selected project data
+    setEditingIndex(index);// Set the index to indicate editing mode
   };
 
+  // Handle removing a project
   const handleRemoveProject = (index) => {
-    const updatedProjects = projects.filter((_, i) => i !== index);
-    dispatch(saveProjects(updatedProjects));
+    const updatedProjects = projects.filter((_, i) => i !== index);// Remove project at selected index
+    dispatch(saveProjects(updatedProjects));// Dispatch updated projects list
     setEditingIndex(null);
-    setNewProject({ title: '', description: '', technologies: '', link: '' });
+    setNewProject({ title: '', description: '', technologies: '', link: '' });// Reset form fields
   };
 
   return (
