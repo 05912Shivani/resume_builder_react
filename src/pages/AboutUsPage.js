@@ -1,6 +1,9 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-
+/**
+ * AboutUsPage Component
+ * Displays information about the Resume Builder application.
+ */
 const AboutUsPage = () => {
   return (
     <Box sx={{ p: 4 }}>
