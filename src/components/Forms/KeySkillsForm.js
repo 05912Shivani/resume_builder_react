@@ -5,35 +5,40 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveKeySkills } from '../../redux/formDataSlice';
 
 const KeySkillsForm = () => {
-  const dispatch = useDispatch();
-  const keySkillsList = useSelector((state) => state.formData.keySkills);
+  const dispatch = useDispatch();// Redux dispatch function to update the store
+  const keySkillsList = useSelector((state) => state.formData.keySkills);// Fetch key skills list from Redux store
 
+   // State for new skill entry
   const [newSkill, setNewSkill] = useState({
     skillName: '',
     proficiency: '',
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState('');// State for error messages
 
+  // Handles input changes for skill name and proficiency
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewSkill({ ...newSkill, [name]: value });
   };
 
+  // Adds a new skill to the keySkills list
   const handleAddSkill = () => {
     if (!newSkill.skillName || !newSkill.proficiency) {
       setError('Skill Name and Proficiency Level are required.');
       return;
     }
 
+    // Update Redux store with new skill
     dispatch(saveKeySkills([...keySkillsList, newSkill]));
     setNewSkill({ skillName: '', proficiency: '' });
     setError('');
   };
 
+  // Removes a skill from the keySkills list
   const handleRemoveSkill = (index) => {
     const updatedKeySkills = keySkillsList.filter((_, i) => i !== index);
-    dispatch(saveKeySkills(updatedKeySkills));
+    dispatch(saveKeySkills(updatedKeySkills));// Update Redux store
   };
 
   return (
