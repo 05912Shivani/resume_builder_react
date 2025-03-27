@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveWorkExperience } from '../../redux/formDataSlice';
 
 const WorkExperienceForm = () => {
-  const dispatch = useDispatch();
-  const workExperienceList = useSelector((state) => state.formData.workExperience);
+  const dispatch = useDispatch();// Redux dispatch function
+  const workExperienceList = useSelector((state) => state.formData.workExperience);// Retrieve work experience list from Redux store
 
+  // State to manage form inputs for adding or editing an experience
   const [newExperience, setNewExperience] = useState({
     jobTitle: '',
     companyName: '',
@@ -15,15 +16,17 @@ const WorkExperienceForm = () => {
     jobDescription: '',
   });
 
-  const [error, setError] = useState('');
-  const [editIndex, setEditIndex] = useState(null); 
+  const [error, setError] = useState('');// State to store validation errors
+  const [editIndex, setEditIndex] = useState(null); // Index of the experience being edited (if any)
 
+   // Handles input field changes and updates state
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewExperience({ ...newExperience, [name]: value });
   };
-
+// Handles adding or updating work experience
   const handleAddExperience = () => {
+    // Validation: Ensure required fields are filled
     if (!newExperience.jobTitle || !newExperience.companyName || !newExperience.startYear) {
       setError('Job Title, Company Name, and Start Year are required.');
       return;
@@ -32,25 +35,28 @@ const WorkExperienceForm = () => {
     let updatedExperienceList = [...workExperienceList];
 
     if (editIndex !== null) {
+      // If editing, update the existing experience
       updatedExperienceList[editIndex] = newExperience; 
       setEditIndex(null);
     } else {
+      // If adding a new entry, push it to the list
       updatedExperienceList.push(newExperience);
     }
 
-    dispatch(saveWorkExperience(updatedExperienceList));
+    dispatch(saveWorkExperience(updatedExperienceList));// Save updated list to Redux
+     // Reset form fields after submission
     setNewExperience({ jobTitle: '', companyName: '', startYear: '', endYear: '', jobDescription: '' });
     setError('');
   };
-
+ // Handles editing an existing work experience entry
   const handleEditExperience = (index) => {
-    setNewExperience(workExperienceList[index]);
-    setEditIndex(index);
+    setNewExperience(workExperienceList[index]);// Populate form fields with selected experience
+    setEditIndex(index);// Set index to track which entry is being edited
   };
-
+// Handles removing a work experience entry
   const handleRemoveExperience = (index) => {
-    const updatedExperienceList = workExperienceList.filter((_, i) => i !== index);
-    dispatch(saveWorkExperience(updatedExperienceList));
+    const updatedExperienceList = workExperienceList.filter((_, i) => i !== index);// Remove selected experience
+    dispatch(saveWorkExperience(updatedExperienceList));// Update Redux store
   };
 
   return (
