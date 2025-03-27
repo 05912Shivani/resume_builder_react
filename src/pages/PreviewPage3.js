@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { Box, Button, Typography, Divider, Modal, TextField, } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { setActiveTab } from "../redux/formDataSlice";
-import jsPDF from "jspdf";
+import jsPDF from "jspdf";// Importing jsPDF to generate a PDF file
 
 const PreviewPage3 = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // Extracting data from Redux store
   const {
     personalInfo,
     workExperience,
@@ -17,8 +18,8 @@ const PreviewPage3 = () => {
     activeTab,
   } = useSelector((state) => state.formData);
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [resumeName, setResumeName] = useState("resume");
+  const [isModalOpen, setModalOpen] = useState(false);// State to handle modal visibility
+  const [resumeName, setResumeName] = useState("resume");// State for resume filename
   const [sections, setSections] = useState({
     personalInfo: true,
     workExperience: true,
@@ -26,8 +27,8 @@ const PreviewPage3 = () => {
     projects: true,
     keySkills: true,
   });
-  const resumeRef = useRef();
-
+  const resumeRef = useRef();// Reference for the resume container
+// Effect to initialize sections if activeTab is not set but personalInfo exists
   useEffect(() => {
     if (!activeTab && personalInfo.name) {
       setSections({
@@ -39,27 +40,29 @@ const PreviewPage3 = () => {
       });
     }
   }, [activeTab, personalInfo]);
-
+// Function to toggle the visibility of a section
   const toggleSection = (section) => {
     setSections((prevState) => ({
       ...prevState,
       [section]: !prevState[section],
     }));
   };
-
+// Function to generate and download a resume PDF
   const handleDownload = () => {
-    const doc = new jsPDF();
+    const doc = new jsPDF();// Creating a new PDF document
     doc.setFont("helvetica", "bold");
 
-    let yPosition = 20;
-    const pageHeight = doc.internal.pageSize.height - 20;
+    let yPosition = 20;// Initial Y position for text
+    const pageHeight = doc.internal.pageSize.height - 20;// Max height before adding a new page
+      // Helper function to check if a new page is needed
     const checkPageOverflow = (y) => {
       if (y > pageHeight) {
         doc.addPage();
-        return 30;
+        return 30;// Reset Y position for new page
       }
       return y;
     };
+    // Function to wrap and add text within a maximum width
     const addWrappedText = (text, x, y, maxWidth) => {
       const splitText = doc.splitTextToSize(text, maxWidth);
       splitText.forEach((line) => {
@@ -69,7 +72,7 @@ const PreviewPage3 = () => {
       });
       return y;
     };
-
+    // Function to add section titles with an underline
     const addSectionTitle = (title, y) => {
       y = checkPageOverflow(y);
       doc.text(title, 20, y);
@@ -77,7 +80,7 @@ const PreviewPage3 = () => {
       doc.line(20, y + 2, 190, y + 2);
       return y + 10;
     };
-
+// Adding Personal Information Section
     if (sections.personalInfo) {
       const name = `${personalInfo.firstName} ${personalInfo.lastName}`;
       const nameWidth = doc.getTextWidth(name);
@@ -92,6 +95,7 @@ const PreviewPage3 = () => {
       doc.setFontSize(8);
       const contactInfo = `${personalInfo.email} | ${personalInfo.github} | ${personalInfo.linkedin} | ${personalInfo.phone} | ${personalInfo.address}`;
       const contactWidth = doc.internal.pageSize.width - 40; 
+       // Contact Information
       const wrappedContactInfo = doc.splitTextToSize(contactInfo, contactWidth);
 
       doc.text(wrappedContactInfo, 20, yPosition); 
@@ -244,9 +248,9 @@ const PreviewPage3 = () => {
         yPosition = addWrappedText(`${skill.skillName} - ${skill.proficiency}`, 20, yPosition, 160);
       });
     }
-
+// Save the generated PDF
     doc.save(`${resumeName || "Professional_resume"}.pdf`);
-    setModalOpen(true);
+    setModalOpen(true);// Show modal on successful download
   };
 
   const renderSection = (title, content, tabIndex, sectionName) => (
