@@ -6,11 +6,11 @@ import InfoIcon from '@mui/icons-material/Info';
 import BuildIcon from '@mui/icons-material/Build';
 import PreviewIcon from '@mui/icons-material/Visibility';
 import { useDispatch } from 'react-redux';
-import { resetFormData } from '../../redux/formDataSlice'; 
+import { resetFormData } from '../../redux/formDataSlice'; // Redux action to reset form data
 
 const Header = () => {
-  const location = useLocation();
-  const dispatch = useDispatch();
+  const location = useLocation();// Get current route path
+  const dispatch = useDispatch(); // Initialize dispatch for Redux actions
 
   const isPreviewPage =
     location.pathname === '/preview1' ||
@@ -18,6 +18,7 @@ const Header = () => {
     location.pathname === '/preview3' ||
     location.pathname === '/preview4';
 
+  // Function to reset form data when navigating to another page
   const handleReset = () => {
     dispatch(resetFormData()); 
   };
