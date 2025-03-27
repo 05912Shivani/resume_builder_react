@@ -4,15 +4,16 @@ import { TextField, Button, Box, Typography, Grid, TextareaAutosize } from '@mui
 import { savePersonalInfo } from '../../redux/formDataSlice';
 
 const PersonalInfoForm = () => {
-  const dispatch = useDispatch();
-  const { personalInfo } = useSelector((state) => state.formData);
+  const dispatch = useDispatch();// Initialize dispatch to send actions to Redux store
+  const { personalInfo } = useSelector((state) => state.formData);// Get stored personal info from Redux
 
+  // Initialize react-hook-form with default values from Redux state
   const {
     control,
     handleSubmit,
     setError,
     clearErrors,
-    formState: { errors },
+    formState: { errors }, // Stores form validation errors
   } = useForm({
     defaultValues: {
       firstName: personalInfo.firstName || '',
@@ -26,9 +27,10 @@ const PersonalInfoForm = () => {
     },
   });
 
+  // Custom validation function for required fields
   const validateForm = (data) => {
     let valid = true;
-    clearErrors();
+    clearErrors();// Clear previous errors
 
     if (!data.firstName) {
       setError('firstName', { type: 'manual', message: 'First Name is required' });
@@ -43,12 +45,13 @@ const PersonalInfoForm = () => {
       valid = false;
     }
 
-    return valid;
+    return valid;// Return true if form is valid
   };
 
+   // Handle form submission
   const handleFormSubmit = (data) => {
     if (validateForm(data)) {
-      dispatch(savePersonalInfo(data));
+      dispatch(savePersonalInfo(data));// Save data to Redux store
     }
   };
 
