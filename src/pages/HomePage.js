@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import { Button, Card, CardContent, Typography, Box } from '@mui/material';
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const templates = useSelector((state) => state.templates);
-
+  const navigate = useNavigate(); // Initialize navigation hook
+  const templates = useSelector((state) => state.templates); // Fetches the list of templates from Redux store
+// Handles template selection and navigates to the details-filling page with the selected template ID
   const handleTemplateClick = (templateId) => {
     navigate('/details-filling', { state: { templateId } });
   };
@@ -20,6 +20,7 @@ const HomePage = () => {
       <Typography variant="body1" sx={{ mb: 4 }}>
         Select a template to start crafting your professional resume quickly and easily.
       </Typography>
+          {/* Container for displaying available templates */}
       <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
         {templates.map((template) => (
           <Card
