@@ -8,6 +8,7 @@ import jsPDF from "jspdf";
 const PreviewPage1 = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // Extract resume data from Redux store
   const {
     personalInfo,
     workExperience,
@@ -16,7 +17,7 @@ const PreviewPage1 = () => {
     keySkills,
     activeTab,
   } = useSelector((state) => state.formData);
-
+// State for modal, resume name, and section visibility
   const [isModalOpen, setModalOpen] = useState(false);
   const [resumeName, setResumeName] = useState("resume");
   const [sections, setSections] = useState({
@@ -27,7 +28,7 @@ const PreviewPage1 = () => {
     keySkills: true,
   });
   const resumeRef = useRef();
-
+// Ensure sections are reset when the page loads if personal info is available
   useEffect(() => {
     if (!activeTab && personalInfo.name) {
       setSections({
@@ -39,24 +40,25 @@ const PreviewPage1 = () => {
       });
     }
   }, [activeTab, personalInfo]);
-
+// Toggle visibility of sections
   const toggleSection = (section) => {
     setSections((prevState) => ({
       ...prevState,
       [section]: !prevState[section],
     }));
   };
-
+// Function to generate and download the resume as a PDF
   const handleDownload = () => {
     const doc = new jsPDF();
     doc.setFont("times", "bold");
 
     let yPosition = 20;
     const pageHeight = doc.internal.pageSize.height - 20;
-
+ // Handle page overflow
     const checkPageOverflow = (y) => {
       if (y > pageHeight) {
         doc.addPage();
+        // Set background color for resume
         doc.setFillColor(230, 230, 250); 
         doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, "F");
         return 30;
@@ -66,7 +68,7 @@ const PreviewPage1 = () => {
 
     doc.setFillColor(230, 230, 250);
     doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, "F");
-
+// Header section
     doc.setFillColor(173, 216, 230);
     doc.rect(0, 0, doc.internal.pageSize.width, 39, "F");
 
@@ -85,7 +87,7 @@ const PreviewPage1 = () => {
     doc.setLineWidth(0.5);
     doc.line(20, yPosition + 2, 190, yPosition + 2);
     yPosition += 10;
-
+// Function to wrap long text
     const addWrappedText = (text, x, y, maxWidth) => {
       const splitText = doc.splitTextToSize(text, maxWidth);
       splitText.forEach((line) => {
@@ -95,7 +97,7 @@ const PreviewPage1 = () => {
       });
       return y;
     };
-
+   // Function to add section title with underline
     const addSectionTitle = (title, y) => {
       doc.setFontSize(14);
       doc.setFont("times", "bold");
@@ -243,7 +245,7 @@ const PreviewPage1 = () => {
       <Typography variant="h4" gutterBottom>
         Preview Your Resume
       </Typography>
-
+ {/* Resume preview and actions */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
         <Box
           ref={resumeRef}
@@ -349,6 +351,7 @@ const PreviewPage1 = () => {
               "keySkills"
             )}
         </Box>
+               {/* Resume saving options */}
         <Box
           sx={{
             width: "35%",
