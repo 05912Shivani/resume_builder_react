@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveEducation } from '../../redux/formDataSlice';
 
 const EducationForm = () => {
-  const dispatch = useDispatch();
-  const educationList = useSelector((state) => state.formData.education);
+  const dispatch = useDispatch();// Get the dispatch function to update Redux state
+  const educationList = useSelector((state) => state.formData.education);// Get stored education data from Redux
 
   const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i); // Last 50 years
 
@@ -16,10 +16,10 @@ const EducationForm = () => {
     startYear: '',
     endYear: '',
     percentage: '',
-  });
+  });// Store new education details
 
-  const [errors, setErrors] = useState({});
-  const [editIndex, setEditIndex] = useState(null);
+  const [errors, setErrors] = useState({});// Store validation errors
+  const [editIndex, setEditIndex] = useState(null);// Track index of the entry being edited
 
   const validateForm = () => {
     let newErrors = {};
@@ -30,29 +30,29 @@ const EducationForm = () => {
     if (newEducation.endYear && newEducation.startYear && newEducation.endYear < newEducation.startYear) {
       newErrors.endYear = 'End Year cannot be before Start Year';
     }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors(newErrors);// Update errors state
+    return Object.keys(newErrors).length === 0;// Return true if no errors
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewEducation({ ...newEducation, [name]: value });
+    setNewEducation({ ...newEducation, [name]: value });// Update specific field in the form state
   };
 
   const handleAddEducation = () => {
-    if (!validateForm()) return;
+    if (!validateForm()) return;// Validate form before saving
 
     let updatedEducationList = [...educationList];
     if (editIndex !== null) {
-      updatedEducationList[editIndex] = newEducation;
+      updatedEducationList[editIndex] = newEducation;// Update existing entry if editing
       setEditIndex(null);
     } else {
-      updatedEducationList.push(newEducation);
+      updatedEducationList.push(newEducation);// Add new entry if not editing
     }
 
-    dispatch(saveEducation(updatedEducationList));
+    dispatch(saveEducation(updatedEducationList));// Save to Redux state
     setNewEducation({ educationType: '', degree: '', university: '', startYear: '', endYear: '', percentage: '' });
-    setErrors({});
+    setErrors({});// Clear errors
   };
 
   const handleEditEducation = (index) => {
@@ -61,8 +61,8 @@ const EducationForm = () => {
   };
 
   const handleRemoveEducation = (index) => {
-    const updatedEducationList = educationList.filter((_, i) => i !== index);
-    dispatch(saveEducation(updatedEducationList));
+    const updatedEducationList = educationList.filter((_, i) => i !== index);// Remove selected entry
+    dispatch(saveEducation(updatedEducationList));// Update Redux state
   };
 
   return (
