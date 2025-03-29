@@ -11,28 +11,44 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const DetailsFillingPage = () => {
   const dispatch = useDispatch();
-  const activeTab = useSelector((state) => state.formData.activeTab);// Retrieves the currently active tab from Redux store
-  const templateId = useSelector((state) => state.formData.templateId); // Retrieves the selected template ID
+  const activeTab = useSelector((state) => state.formData.activeTab);
+  const templateId = useSelector((state) => state.formData.templateId);
+  const personalInfo = useSelector((state) => state.formData.personalInfo);
+  const workExperience = useSelector((state) => state.formData.workExperience);
+  const education = useSelector((state) => state.formData.education);
+  const keySkills = useSelector((state) => state.formData.keySkills);
+  const projects = useSelector((state) => state.formData.projects);
+  
   const navigate = useNavigate();
   const location = useLocation();
-  const { templateId: passedTemplateId } = location.state || {}; // Extracts templateId from navigation state if available
+  const { templateId: passedTemplateId } = location.state || {}; 
 
   useEffect(() => {
     if (passedTemplateId) {
-      dispatch(setTemplateId(passedTemplateId));   // Sets template ID in Redux store when received from navigation
+      dispatch(setTemplateId(passedTemplateId));  
     }
   }, [passedTemplateId, dispatch]);
 
-  // Handles tab change and updates Redux state
   const handleTabChange = (event, newValue) => {
     dispatch(setActiveTab(newValue));
   };
-// Navigates to preview page with selected template ID
+
   const previewResume = () => {
     console.log('Previewing template:', templateId); 
     navigate(`/preview${templateId}`, { state: { templateId } }); 
   };
-// Renders the appropriate form based on the active tab
+
+  // ✅ Check if all forms are filled
+  const isAllFormsFilled = () => {
+    return (
+      Object.keys(personalInfo).length > 0 &&  // Personal Info should not be empty
+      workExperience.length > 0 &&  // At least one Work Experience
+      Object.keys(education).length > 0 &&  // Education should not be empty
+      Object.keys(keySkills).length > 0 &&  // Key Skills should not be empty
+      projects.length > 0  // At least one Project
+    );
+  };
+
   const renderForm = () => {
     switch (activeTab) {
       case 0:
@@ -62,9 +78,7 @@ const DetailsFillingPage = () => {
         <Tab label="Projects" />
         <Tab label="Keyskills" />
       </Tabs>
-  {/* Displays the form corresponding to the active tab */}
       <Box>{renderForm()}</Box>
-        {/* Navigation Buttons */}
       <Box sx={{ mt: 3 }}>
         {activeTab > 0 && (
           <Button
@@ -91,6 +105,7 @@ const DetailsFillingPage = () => {
             color="secondary"
             onClick={previewResume}
             sx={{ ml: 2 }}
+            disabled={!isAllFormsFilled()} // 🔥 Disable until all forms are filled
           >
             Preview Resume
           </Button>
@@ -101,4 +116,3 @@ const DetailsFillingPage = () => {
 };
 
 export default DetailsFillingPage;
-
