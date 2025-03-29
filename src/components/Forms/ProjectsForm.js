@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveProjects } from '../../redux/formDataSlice';
+import { saveProjects } from '../../redux/formDataSlice';// Import Redux action to save education details
 
 const ProjectsForm = () => {
-  const dispatch = useDispatch();
-  const projects = useSelector((state) => state.formData.projects);
+  const dispatch = useDispatch();// Get the dispatch function to update Redux state
+  const projects = useSelector((state) => state.formData.projects);// Get stored projects data from Redux
 
   const [newProject, setNewProject] = useState({
     title: '',
     description: '',
     technologies: '',
     link: '',
-  });
+  });// Store new projects details
 
-  const [errors, setErrors] = useState({});
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [errors, setErrors] = useState({});// Store validation errors
+  const [editingIndex, setEditingIndex] = useState(null);// Track index of the entry being edited
 
   const validateForm = () => {
     let newErrors = {};
@@ -36,15 +36,15 @@ const ProjectsForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewProject({ ...newProject, [name]: value });
+    setNewProject({ ...newProject, [name]: value });// Update specific field in the form state
   };
 
   const handleAddOrUpdateProject = () => {
-    if (!validateForm()) return;
+    if (!validateForm()) return;// Validate form before saving
 
     if (editingIndex !== null) {
       const updatedProjects = [...projects];
-      updatedProjects[editingIndex] = newProject;
+      updatedProjects[editingIndex] = newProject;// Update existing entry if editing
       dispatch(saveProjects(updatedProjects));
       setEditingIndex(null);
     } else {
@@ -61,8 +61,8 @@ const ProjectsForm = () => {
   };
 
   const handleRemoveProject = (index) => {
-    const updatedProjects = projects.filter((_, i) => i !== index);
-    dispatch(saveProjects(updatedProjects));
+    const updatedProjects = projects.filter((_, i) => i !== index);// Remove selected entry
+    dispatch(saveProjects(updatedProjects)); // Update Redux state
     setEditingIndex(null);
     setNewProject({ title: '', description: '', technologies: '', link: '' });
   };
